@@ -25,7 +25,11 @@ def initialize(request):
 @csrf_exempt
 @api_view(["GET"])
 def rooms(request):
-    return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+    map = []
+    rooms = Room.objects.all()
+    for room in rooms:
+        map.append({"title": room.title})
+    return JsonResponse({"rooms": map}, safe=True, status=200)
 
 # @csrf_exempt
 @api_view(["POST"])
