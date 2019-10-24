@@ -1,11 +1,46 @@
 from django.contrib.auth.models import User
 from adventure.models import Player, Room
+import csv
 
+# Room.objects.all().delete()
 
-Room.objects.all().delete()
+# def RoomMaker():
+#   with open('names.csv', 'r') as room_names:
+#     names = csv.DictReader(room_names)
+#     for row in names:
+#       room = Room(row)
+#       room.save()
 
-r_outside = Room(title="Outside Cave Entrance",
-               description="North of you, the cave mount beckons")
+# RoomMaker()
+
+rooms = open("names.txt", "r")
+room_names = rooms.read().split("\n")
+descriptions = open("descriptions.txt", "r")
+room_descriptions = descriptions.read().split("\n")
+
+list = []
+dict = {}
+
+# for room_name in room_names:
+#   room = Room(title=room_name)
+#   room.save()
+
+for name in room_names:
+  dict[name] = Room(title=name, description="A generic room")
+
+for room in dict:
+  list.append(dict[room])
+
+for i in range(len(list)):
+  list[i].save()
+
+for i in range(len(list) - 1):
+  list[i].connectRooms(list[i + 1], "n")
+
+for i in range(len(list)):
+  list[i].connectRooms(list[i - 1], "s")
+
+r_outside = Room(title="Outside Cave Entrance", description="North of you, the cave mount beckons")
 
 r_foyer = Room(title="Foyer", description="""Dim light filters in from the south. Dusty
 passages run north and east.""")
